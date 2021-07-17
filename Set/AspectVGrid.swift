@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiable {
-    var items: [Item]
-    var aspectRatio: CGFloat
-    var content: (Item) -> ItemView
+    private var items: [Item]
+    private var aspectRatio: CGFloat
+    private var content: (Item) -> ItemView
     
     init(items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
         self.items = items
