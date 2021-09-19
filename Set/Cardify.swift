@@ -11,6 +11,7 @@ import SwiftUI
 struct CardifyModifier: ViewModifier {
     let isFaceUp: Bool
     let isSelected: Bool
+    let isHinted: Bool
     
     func body(content: Content) -> some View {
         let border = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
@@ -22,7 +23,11 @@ struct CardifyModifier: ViewModifier {
                 if isSelected {
                     border.strokeBorder(Color.green, lineWidth: DrawingConstants.lineWidth * 2)
                 } else {
-                    border.strokeBorder(Color.blue, lineWidth: DrawingConstants.lineWidth)
+                    if isHinted {
+                        border.strokeBorder(Color.yellow, lineWidth: DrawingConstants.lineWidth * 2)
+                    } else {
+                        border.strokeBorder(Color.blue, lineWidth: DrawingConstants.lineWidth)
+                    }
                 }
             } else {
                 RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).foregroundColor(.blue)
@@ -37,7 +42,7 @@ struct CardifyModifier: ViewModifier {
 }
 
 extension View {
-    func cardify(isFaceUp: Bool, isSelected: Bool) -> some View {
-        self.modifier(CardifyModifier(isFaceUp: isFaceUp, isSelected: isSelected))
+    func cardify(isFaceUp: Bool, isSelected: Bool, isHinted: Bool = false) -> some View {
+        self.modifier(CardifyModifier(isFaceUp: isFaceUp, isSelected: isSelected, isHinted: isHinted))
     }
 }

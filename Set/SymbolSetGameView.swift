@@ -60,6 +60,8 @@ struct SymbolSetGameView: View {
             HStack {
                 deckPile
                 Spacer()
+                hint
+                Spacer()
                 discardPile
             }
             .padding()
@@ -69,7 +71,7 @@ struct SymbolSetGameView: View {
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: DrawingConstants.vGridAspectRatio, content: { card in
             if isDealt(card) && !isDiscarded(card) {
-                CardView(card: card).onTapGesture {
+                CardView(card: card, isHinted: hinted.contains(card.id)).onTapGesture {
                     withAnimation {
                         game.choose(card)
                         dealUndealtCards()
@@ -104,7 +106,6 @@ struct SymbolSetGameView: View {
             ForEach(game.deck) { card in
                 CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: dealNamespace)
-
             }
             Text("\(game.deck.count + game.cards.filter({ !isDealt($0) }).count)")
                 .font(.largeTitle).zIndex(100).foregroundColor(.white)
@@ -141,15 +142,57 @@ struct SymbolSetGameView: View {
         }
         .frame(width: DrawingConstants.undealtWidth, height: DrawingConstants.undealtHeight)
     }
+    
+    @State private var hinted = Set<Int>()
+    
+    private func hintMatchingCards() {
+        let cards = game.cards.filter({ isDealt($0) && !isDiscarded($0) })
+        var result: (Int, Int, Int) = (0, 0, 0)
+        for i in cards.indices {
+            for j in cards.indices {
+                for k in cards.indices {
+                    if  i != j && j != i && k != i &&
+                        SetGameCardContent.doCardsMatch(
+                            cards[i].content,
+                            cards[j].content,
+                            cards[k].content
+                    ) {
+                        result = (i, j, k)
+                        break
+                    }
+                }
+            }
+        }
+        if result != (0, 0, 0) {
+            for i in [result.0, result.1, result.2] {
+                let cardIndex = game.cards.firstIndex(where: { $0.id == cards[i].id })!
+                hinted.insert(game.cards[cardIndex].id)
+            }
+        }
+    }
+    
+    private var hint: some View {
+        Button {
+            hintMatchingCards()
+        } label: {
+            Text(.init(systemName: "questionmark.circle")).font(.largeTitle)
+        }
+    }
 }
 
 struct CardView: View {
     let card: SymbolSetGame.Card
+    let isHinted: Bool
+    
+    init(card: SymbolSetGame.Card, isHinted: Bool = false) {
+        self.card = card
+        self.isHinted = isHinted
+    }
     
     var body: some View {
         GeometryReader(content: { geometry in
             let symbol = CardContentConverter.createSymbolView(of: card)
-            symbol.cardify(isFaceUp: !card.isMatched, isSelected: card.isSelected)
+            symbol.cardify(isFaceUp: !card.isMatched, isSelected: card.isSelected, isHinted: isHinted)
         })
     }
 }
