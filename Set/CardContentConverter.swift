@@ -12,9 +12,11 @@ struct CardContentConverter {
     static func createSymbolView(of card: SymbolSetGame.Card) -> some View {
         GeometryReader { geometry in
             let aspectRatio: CGFloat = geometry.size.width / geometry.size.height
+            let shapesCount = card.content.count.get() + 1
             
             VStack {
-                ForEach(0..<(card.content.count.get())+1) { _ in
+                
+                ForEach(0..<shapesCount, id: \.self) { _ in
                     switch card.content.texture.get() {
                     case 0: filledShape(of: card)
                     case 1: strokedShape(of: card)
@@ -61,5 +63,10 @@ struct CardContentConverter {
         case 1: return Color.red
         default:return Color.yellow
         }
+    }
+    
+    private struct DrawingConstants {
+        static let shadedOpacity: Double = 0.5
+        static let lineWidth: CGFloat = 3.0
     }
 }

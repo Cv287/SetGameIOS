@@ -22,7 +22,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     var body: some View {
         GeometryReader { geometry in
             let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
-            ScrollView {
+            ScrollView(Axis.Set.vertical, showsIndicators: false) {
                 VStack {
                     LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0) {
                         ForEach(items) { item in

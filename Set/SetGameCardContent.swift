@@ -41,10 +41,10 @@ struct SetGameCardContent {
     let count: ThreeState
     let texture: ThreeState
     
-    init(colorState: Int, shapeState: Int, symbols: Int, textureState: Int) {
+    init(colorState: Int, shapeState: Int, countState: Int, textureState: Int) {
         color = ThreeState(colorState)
         shape = ThreeState(shapeState)
-        count = ThreeState(symbols)
+        count = ThreeState(countState)
         texture = ThreeState(textureState)
     }
     

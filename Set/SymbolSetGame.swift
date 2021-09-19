@@ -19,7 +19,7 @@ class SymbolSetGame: ObservableObject {
                 for count in 0..<3 {
                     for texture in 0..<3 {
                         let symbol = CardSymbol(colorState: color, shapeState: shape,
-                                                symbols: count, textureState: texture)
+                                                countState: count, textureState: texture)
                         symbols.append(symbol)
                     }
                 }
@@ -49,17 +49,25 @@ class SymbolSetGame: ObservableObject {
         model.cards
     }
     
+    var deck: [Card] {
+        model.deck
+    }
+    
     var isDeckEmpty: Bool {
         model.deck.isEmpty
     }
     
     var isEnded: Bool {
-        model.cards.isEmpty
+        model.deck.isEmpty && model.cards.allSatisfy { $0.isMatched }
     }
     
     // MARK: - Intents
     func choose(_ card: Card) {
         model.choose(card, doCardsMatch: SetGameCardContent.doCardsMatch)
+    }
+    
+    func deal(_ cardsQuantity: Int) {
+        model.dealOrReplaceMatched(cardsQuantity)
     }
     
     func dealThreeMoreCards() {

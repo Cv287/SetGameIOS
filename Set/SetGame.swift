@@ -12,8 +12,12 @@ struct SetGame<CardContent>  {
     
     private(set) var cards: [Card]
     
-    private var selected: [Card] {
+    var selected: [Card] {
         cards.filter { $0.isSelected }
+    }
+    
+    var areThereThreeMatchedCards: Bool {
+        cards.first(where: { $0.isMatched }) != nil
     }
     
     private let countOfCardsOnStart = 21
@@ -28,8 +32,16 @@ struct SetGame<CardContent>  {
         deal(countOfCardsOnStart)
     }
     
+    private mutating func matchSelectedCards() {
+        selected.forEach {
+            let index = index(of: $0)!
+            cards[index].isMatched = true
+            cards[index].isSelected = false
+        }
+    }
+    
     mutating func choose(_ card: Card, doCardsMatch: (CardContent, CardContent, CardContent) -> Bool) {
-        if selected.contains(card) {
+        if selected.contains(card) || card.isMatched {
             cards[index(of: card)!].isSelected = false
             return
         }
@@ -40,19 +52,19 @@ struct SetGame<CardContent>  {
         }
 
         if selected.count == 3 {
-            if (doSelectedCardsMatch) {
-                selected.forEach { cards.remove(at: index(of: $0)!) }
+            if (doSelectedCardsMatch || cards.count == 3) {
+                matchSelectedCards()
             } else {
                 cards.indices.forEach { cards[$0].isSelected = false }
-                dealThreeMoreCards()
             }
+            dealThreeMoreCards()
         }
 
         if let indexOfSelectedCard = index(of: card) {
             cards[indexOfSelectedCard].isSelected.toggle()
-            if cards.count == 3 && selected.count == 3 {
-                if doSelectedCardsMatch {
-                    cards.removeAll()
+            if cards.filter({ !$0.isMatched }).count == 3 && selected.count == 3 {
+                if doSelectedCardsMatch || deck.isEmpty {
+                    matchSelectedCards()
                 } else {
                     dealThreeMoreCards()
                 }
@@ -60,14 +72,43 @@ struct SetGame<CardContent>  {
         }
     }
     
+    mutating func dealOrReplaceMatched(_ cardsQuantity: Int) {
+        for _ in 0..<cardsQuantity {
+            if areThereThreeMatchedCards {
+                replaceMatchedCardsWithCardsFromDeck(1)
+            } else {
+                deal(1)
+            }
+        }
+    }
+    
     mutating func dealThreeMoreCards() {
-        deal(3)
+        if areThereThreeMatchedCards {
+            replaceMatchedCardsWithCardsFromDeck(3)
+        } else {
+            deal(3)
+        }
     }
     
     private mutating func deal(_ cardsQuantity: Int) {
         if deck.count >= cardsQuantity {
-            cards.append(contentsOf: deck.suffix(cardsQuantity))
-            deck.removeLast(cardsQuantity)
+            for _ in 0..<cardsQuantity {
+                deck[deck.count - 1].isMatched = false
+                cards.append(deck.last!)
+                deck.removeLast()
+            }
+        }
+    }
+    
+    private mutating func replaceMatchedCardsWithCardsFromDeck(_ cardsQuantity: Int) {
+        if deck.count >= cardsQuantity && areThereThreeMatchedCards {
+            for _ in 0..<cardsQuantity {
+                let matchedCardIndex = cards.firstIndex { $0.isMatched == true }!
+                cards.append(cards[matchedCardIndex])
+                let cardFromDeck = deck.removeLast()
+                cards[matchedCardIndex] = cardFromDeck
+                cards[matchedCardIndex].isMatched = false
+            }
         }
     }
     
@@ -75,13 +116,26 @@ struct SetGame<CardContent>  {
         cards.indices.firstIndex { cards[$0].id == card.id }
     }
     
-    struct Card: Identifiable, Equatable {
+    struct Card: Identifiable, Equatable, Hashable {
         let id: Int
         let content: CardContent
         var isSelected = false
+        var isMatched = true
         
         static func == (lhs: Card, rhs: Card) -> Bool {
             return lhs.id == rhs.id
         }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+    }
+}
+
+extension SetGame.Card {
+    func cloneUnmatched() -> Self {
+        var result = self
+        result.isMatched = false
+        return result
     }
 }
