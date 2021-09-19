@@ -207,7 +207,7 @@ struct DrawingConstants {
     static let cornerRadius: CGFloat = 10.0
     static let vGridAspectRatio: CGFloat = 2/3
     static let padding: CGFloat = 3
-    static let undealtHeight: CGFloat = 90
+    static let undealtHeight: CGFloat = 110
     static let undealtWidth = DrawingConstants.undealtHeight * DrawingConstants.vGridAspectRatio
 }
 
