@@ -207,6 +207,24 @@ struct SymbolSetGameView: View {
             Text(.init(systemName: "questionmark.circle")).font(.largeTitle)
         }
     }
+    
+    private struct CardConstants {
+        static let dealDuration: Double = 0.4
+        static let totalDealDuration: Double = dealDuration * 6
+        static let discardedRotation: Double = 7
+        static let discardedRotatedQuantity: Int = 4
+        static let discardedOffsetRight: CGFloat = 10
+        static let discardedOffsetLeft: CGFloat = -33
+    }
+    
+    private struct DrawingConstants {
+        static let lineWidth: CGFloat = 3.0
+        static let cornerRadius: CGFloat = 10.0
+        static let vGridAspectRatio: CGFloat = 2/3
+        static let padding: CGFloat = 3
+        static let undealtHeight: CGFloat = 110
+        static let undealtWidth = DrawingConstants.undealtHeight * DrawingConstants.vGridAspectRatio
+    }
 }
 
 struct CardView: View {
@@ -225,24 +243,6 @@ struct CardView: View {
         let symbol = CardContentConverter.createSymbolView(of: card)
         symbol.cardify(isFaceUp: isFaceUp, isSelected: card.isSelected, isHinted: isHinted)
     }
-}
-
-struct CardConstants {
-    static let dealDuration: Double = 0.4
-    static let totalDealDuration: Double = dealDuration * 6
-    static let discardedRotation: Double = 7
-    static let discardedRotatedQuantity: Int = 4
-    static let discardedOffsetRight: CGFloat = 10
-    static let discardedOffsetLeft: CGFloat = -33
-}
-
-struct DrawingConstants {
-    static let lineWidth: CGFloat = 3.0
-    static let cornerRadius: CGFloat = 10.0
-    static let vGridAspectRatio: CGFloat = 2/3
-    static let padding: CGFloat = 3
-    static let undealtHeight: CGFloat = 110
-    static let undealtWidth = DrawingConstants.undealtHeight * DrawingConstants.vGridAspectRatio
 }
 
 struct ContentView_Previews: PreviewProvider {
