@@ -66,10 +66,6 @@ class SymbolSetGame: ObservableObject {
         model.choose(card, doCardsMatch: SetGameCardContent.doCardsMatch)
     }
     
-    func deal(_ cardsQuantity: Int) {
-        model.dealOrReplaceMatched(cardsQuantity)
-    }
-    
     func dealThreeMoreCards() {
         model.dealThreeMoreCards()
     }

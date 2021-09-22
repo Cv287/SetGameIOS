@@ -15,7 +15,7 @@ struct SymbolSetGameView: View {
     @State private var dealt = Set<Int>()
     
     private var discarded: [SymbolSetGame.Card] {
-        game.cards.filter(isDiscarded).reversed()
+        game.cards.reversed().filter(isDiscarded)
     }
     
     private func isDealt(_ card: SymbolSetGame.Card) -> Bool {
@@ -77,7 +77,7 @@ struct SymbolSetGameView: View {
     private var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: DrawingConstants.vGridAspectRatio, content: { card in
             if isDealt(card) && !isDiscarded(card) {
-                CardView(card: card, isFaceUp: true, isHinted: hinted.contains(card.id)).onTapGesture {
+                CardView(card: card, isFaceUp: true, isHinted: isHinted(card)).onTapGesture {
                     withAnimation {
                         game.choose(card)
                         dealUndealtCards()
@@ -166,6 +166,10 @@ struct SymbolSetGameView: View {
     }
     
     @State private var hinted = Set<Int>()
+    
+    func isHinted(_ card: SymbolSetGame.Card) -> Bool {
+        hinted.contains(card.id)
+    }
     
     private func hintMatchingCards() {
         let cards = game.cards.filter({ isDealt($0) && !isDiscarded($0) })

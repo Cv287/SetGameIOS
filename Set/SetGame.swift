@@ -56,8 +56,8 @@ struct SetGame<CardContent>  {
                 matchSelectedCards()
             } else {
                 cards.indices.forEach { cards[$0].isSelected = false }
+                dealThreeMoreCards()
             }
-            dealThreeMoreCards()
         }
 
         if let indexOfSelectedCard = index(of: card) {
@@ -83,11 +83,7 @@ struct SetGame<CardContent>  {
     }
     
     mutating func dealThreeMoreCards() {
-        if areThereThreeMatchedCards {
-            replaceMatchedCardsWithCardsFromDeck(3)
-        } else {
-            pushBackFromDeck(3)
-        }
+        pushBackFromDeck(3)
     }
     
     private mutating func pushBackFromDeck(_ cardsQuantity: Int) {
