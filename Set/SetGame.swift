@@ -29,7 +29,7 @@ struct SetGame<CardContent>  {
             deck.append(card)
         }
         cards = []
-        deal(countOfCardsOnStart)
+        pushBackFromDeck(countOfCardsOnStart)
     }
     
     private mutating func matchSelectedCards() {
@@ -77,7 +77,7 @@ struct SetGame<CardContent>  {
             if areThereThreeMatchedCards {
                 replaceMatchedCardsWithCardsFromDeck(1)
             } else {
-                deal(1)
+                pushBackFromDeck(1)
             }
         }
     }
@@ -86,11 +86,11 @@ struct SetGame<CardContent>  {
         if areThereThreeMatchedCards {
             replaceMatchedCardsWithCardsFromDeck(3)
         } else {
-            deal(3)
+            pushBackFromDeck(3)
         }
     }
     
-    private mutating func deal(_ cardsQuantity: Int) {
+    private mutating func pushBackFromDeck(_ cardsQuantity: Int) {
         if deck.count >= cardsQuantity {
             for _ in 0..<cardsQuantity {
                 deck[deck.count - 1].isMatched = false

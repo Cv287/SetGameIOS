@@ -8,16 +8,28 @@
 import Foundation
 import SwiftUI
 
-struct CardifyModifier: ViewModifier {
-    let isFaceUp: Bool
+struct CardifyModifier: AnimatableModifier {
     let isSelected: Bool
     let isHinted: Bool
     
+    var rotation: Double // in degrees
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+    
+    init(isFaceUp: Bool, isSelected: Bool, isHinted: Bool = false) {
+        rotation = isFaceUp ? 0 : 180
+        self.isSelected = isSelected
+        self.isHinted = isHinted
+    }
+    
     func body(content: Content) -> some View {
-        let border = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-        
         ZStack {
-            if isFaceUp {
+            let border = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+            
+            if rotation < 90 {
+                border.foregroundColor(.white)
                 content
                 
                 if isSelected {
@@ -33,6 +45,7 @@ struct CardifyModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).foregroundColor(.blue)
             }
         }
+        .rotation3DEffect(Angle.degrees(rotation), axis: (0, 1, 0))
     }
     
     private struct DrawingConstants {
@@ -44,5 +57,17 @@ struct CardifyModifier: ViewModifier {
 extension View {
     func cardify(isFaceUp: Bool, isSelected: Bool, isHinted: Bool = false) -> some View {
         self.modifier(CardifyModifier(isFaceUp: isFaceUp, isSelected: isSelected, isHinted: isHinted))
+    }
+}
+
+struct Cardify_Previews: PreviewProvider {
+    @State static var rotated = false
+    
+    static var previews: some View {
+        Text("Sample").cardify(isFaceUp: rotated, isSelected: rotated)
+        .onTapGesture {
+            Cardify_Previews.rotated.toggle()
+        }
+        .padding()
     }
 }
