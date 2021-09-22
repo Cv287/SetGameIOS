@@ -41,11 +41,6 @@ struct SetGame<CardContent>  {
     }
     
     mutating func choose(_ card: Card, doCardsMatch: (CardContent, CardContent, CardContent) -> Bool) {
-        if selected.contains(card) || card.isMatched {
-            cards[index(of: card)!].isSelected = false
-            return
-        }
-
         var doSelectedCardsMatch: Bool {
             let contents = selected.map { $0.content }
             return doCardsMatch(contents[0], contents[1], contents[2])
@@ -125,13 +120,5 @@ struct SetGame<CardContent>  {
         func hash(into hasher: inout Hasher) {
             hasher.combine(id)
         }
-    }
-}
-
-extension SetGame.Card {
-    func cloneUnmatched() -> Self {
-        var result = self
-        result.isMatched = false
-        return result
     }
 }

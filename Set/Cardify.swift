@@ -29,18 +29,19 @@ struct CardifyModifier: AnimatableModifier {
             let border = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             
             if rotation < 90 {
-                border.foregroundColor(.white)
-                content
-                
                 if isSelected {
                     border.strokeBorder(Color.green, lineWidth: DrawingConstants.lineWidth * 2)
                 } else {
+                    border.foregroundColor(.white)
+                    
                     if isHinted {
                         border.strokeBorder(Color.yellow, lineWidth: DrawingConstants.lineWidth * 2)
                     } else {
                         border.strokeBorder(Color.blue, lineWidth: DrawingConstants.lineWidth)
                     }
                 }
+                
+                content
             } else {
                 RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).foregroundColor(.blue)
             }

@@ -151,7 +151,6 @@ struct SymbolSetGameView: View {
             Double(index) * CardConstants.discardedRotation : 0
     }
     
-    @ViewBuilder
     private var discardPile: some View {
         ZStack {
             ForEach(discarded) { card in
