@@ -11,12 +11,22 @@ struct SetGame<CardContent>  {
     private(set) var deck: [Card]
     
     private(set) var cards: [Card]
+        
+    private(set) var hasMismatchOccured = false
     
     var selected: [Card] {
         cards.filter { $0.isSelected }
     }
     
-    var areThereThreeMatchedCards: Bool {
+    private mutating func matchSelectedCards() {
+        selected.forEach {
+            let index = index(of: $0)!
+            cards[index].isMatched = true
+            cards[index].isSelected = false
+        }
+    }
+    
+    var isThereAtLeastOneMatchedCard: Bool {
         cards.first(where: { $0.isMatched }) != nil
     }
     
@@ -32,27 +42,17 @@ struct SetGame<CardContent>  {
         pushBackFromDeck(countOfCardsOnStart)
     }
     
-    private mutating func matchSelectedCards() {
-        selected.forEach {
-            let index = index(of: $0)!
-            cards[index].isMatched = true
-            cards[index].isSelected = false
-        }
-    }
-    
     mutating func choose(_ card: Card, doCardsMatch: (CardContent, CardContent, CardContent) -> Bool) {
+        hasMismatchOccured = false
+        
+        if selected.contains(card) {
+            cards[index(of: card)!].isSelected = false
+            return
+        }
+        
         var doSelectedCardsMatch: Bool {
             let contents = selected.map { $0.content }
             return doCardsMatch(contents[0], contents[1], contents[2])
-        }
-
-        if selected.count == 3 {
-            if (doSelectedCardsMatch || cards.count == 3) {
-                matchSelectedCards()
-            } else {
-                cards.indices.forEach { cards[$0].isSelected = false }
-                dealThreeMoreCards()
-            }
         }
 
         if let indexOfSelectedCard = index(of: card) {
@@ -62,23 +62,34 @@ struct SetGame<CardContent>  {
                     matchSelectedCards()
                 } else {
                     dealThreeMoreCards()
+                    hasMismatchOccured = true
                 }
+            }
+        }
+        
+        if selected.count == 3 {
+            if doSelectedCardsMatch || cards.count == 3 {
+                matchSelectedCards()
+            } else {
+                cards.indices.forEach { cards[$0].isSelected = false }
+                dealThreeMoreCards()
+                hasMismatchOccured = true
             }
         }
     }
     
-    mutating func dealOrReplaceMatched(_ cardsQuantity: Int) {
-        for _ in 0..<cardsQuantity {
-            if areThereThreeMatchedCards {
-                replaceMatchedCardsWithCardsFromDeck(1)
-            } else {
-                pushBackFromDeck(1)
-            }
-        }
+    mutating func moveAllMatchedCardsBack() {
+        let matchedCards = cards.filter({ $0.isMatched })
+        let unmatchedCards = cards.filter({ !matchedCards.contains($0) })
+        cards = unmatchedCards + matchedCards
     }
     
     mutating func dealThreeMoreCards() {
         pushBackFromDeck(3)
+    }
+    
+    mutating func replaceThreeMatchedCards() {
+        replaceMatchedCardsWithCardsFromDeck(3)
     }
     
     private mutating func pushBackFromDeck(_ cardsQuantity: Int) {
@@ -92,7 +103,7 @@ struct SetGame<CardContent>  {
     }
     
     private mutating func replaceMatchedCardsWithCardsFromDeck(_ cardsQuantity: Int) {
-        if deck.count >= cardsQuantity && areThereThreeMatchedCards {
+        if deck.count >= cardsQuantity && isThereAtLeastOneMatchedCard {
             for _ in 0..<cardsQuantity {
                 let matchedCardIndex = cards.firstIndex { $0.isMatched == true }!
                 cards.append(cards[matchedCardIndex])
@@ -111,7 +122,7 @@ struct SetGame<CardContent>  {
         let id: Int
         let content: CardContent
         var isSelected = false
-        var isMatched = true
+        var isMatched = false
         
         static func == (lhs: Card, rhs: Card) -> Bool {
             return lhs.id == rhs.id

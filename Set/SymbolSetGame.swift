@@ -53,6 +53,10 @@ class SymbolSetGame: ObservableObject {
         model.deck
     }
     
+    var hasMismatchOccured: Bool {
+        model.hasMismatchOccured
+    }
+    
     var isDeckEmpty: Bool {
         model.deck.isEmpty
     }
@@ -61,13 +65,34 @@ class SymbolSetGame: ObservableObject {
         model.deck.isEmpty && model.cards.allSatisfy { $0.isMatched }
     }
     
+    var selectedCards: [Card] {
+        model.selected
+    }
+    
+    private var selectedCardsAudit = [Card]()
+    
+    func lastThreeSelectedCards() -> [Card] {
+        selectedCardsAudit.suffix(3)
+    }
+    
     // MARK: - Intents
     func choose(_ card: Card) {
+        if !selectedCards.contains(card) {
+            selectedCardsAudit.append(card)
+        }
         model.choose(card, doCardsMatch: SetGameCardContent.doCardsMatch)
     }
     
     func dealThreeMoreCards() {
         model.dealThreeMoreCards()
+    }
+    
+    func replaceThreeMatchedCards() {
+        model.replaceThreeMatchedCards()
+    }
+    
+    func moveDiscardedCardsAway() {
+        model.moveAllMatchedCardsBack()
     }
     
     func reset() {
