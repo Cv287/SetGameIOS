@@ -10,6 +10,7 @@
 		4D0CCDEF26A359B40054DBE3 /* CardContentConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0CCDEE26A359B40054DBE3 /* CardContentConverter.swift */; };
 		4D33B64826FD0D2700610BA4 /* Matchify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33B64726FD0D2700610BA4 /* Matchify.swift */; };
 		4D33B64A26FE6C4F00610BA4 /* Mismatchify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33B64926FE6C4F00610BA4 /* Mismatchify.swift */; };
+		4D33B64C26FE930F00610BA4 /* Flip3DTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33B64B26FE930F00610BA4 /* Flip3DTransition.swift */; };
 		4DC0648726F0CE4B00E6141D /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC0648626F0CE4B00E6141D /* Cardify.swift */; };
 		4DC4B89E26A05F0D00CCA4BF /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC4B89D26A05F0D00CCA4BF /* SetApp.swift */; };
 		4DC4B8A026A05F0D00CCA4BF /* SymbolSetGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC4B89F26A05F0D00CCA4BF /* SymbolSetGameView.swift */; };
@@ -26,6 +27,7 @@
 		4D0CCDEE26A359B40054DBE3 /* CardContentConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentConverter.swift; sourceTree = "<group>"; };
 		4D33B64726FD0D2700610BA4 /* Matchify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matchify.swift; sourceTree = "<group>"; };
 		4D33B64926FE6C4F00610BA4 /* Mismatchify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mismatchify.swift; sourceTree = "<group>"; };
+		4D33B64B26FE930F00610BA4 /* Flip3DTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flip3DTransition.swift; sourceTree = "<group>"; };
 		4DC0648626F0CE4B00E6141D /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		4DC4B89A26A05F0D00CCA4BF /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DC4B89D26A05F0D00CCA4BF /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				4DC4B89F26A05F0D00CCA4BF /* SymbolSetGameView.swift */,
 				4D33B64726FD0D2700610BA4 /* Matchify.swift */,
 				4D33B64926FE6C4F00610BA4 /* Mismatchify.swift */,
+				4D33B64B26FE930F00610BA4 /* Flip3DTransition.swift */,
 				4DC0648626F0CE4B00E6141D /* Cardify.swift */,
 				4DC4B8AD26A05FD200CCA4BF /* AspectVGrid.swift */,
 				4D0CCDEE26A359B40054DBE3 /* CardContentConverter.swift */,
@@ -171,6 +174,7 @@
 				4DC0648726F0CE4B00E6141D /* Cardify.swift in Sources */,
 				4DC4B8A026A05F0D00CCA4BF /* SymbolSetGameView.swift in Sources */,
 				4DC4B8BF26A1A85600CCA4BF /* SetGameCardContent.swift in Sources */,
+				4D33B64C26FE930F00610BA4 /* Flip3DTransition.swift in Sources */,
 				4DC4B8B426A0635700CCA4BF /* SymbolSetGame.swift in Sources */,
 				4DC4B89E26A05F0D00CCA4BF /* SetApp.swift in Sources */,
 				4D33B64826FD0D2700610BA4 /* Matchify.swift in Sources */,
