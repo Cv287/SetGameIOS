@@ -19,7 +19,7 @@ struct CardifyModifier: AnimatableModifier {
     }
     
     init(isFaceUp: Bool, isSelected: Bool, isHinted: Bool = false) {
-        rotation = isFaceUp ? 0 : 180
+        rotation = isHinted ? 360 : isFaceUp ? 0 : 180
         self.isSelected = isSelected
         self.isHinted = isHinted
     }
@@ -28,7 +28,7 @@ struct CardifyModifier: AnimatableModifier {
         ZStack {
             let border = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             
-            if rotation < 90 {
+            if rotation < 90 || (rotation > 270 && rotation <= 360) {
                 if isSelected {
                     border.strokeBorder(Color.green, lineWidth: DrawingConstants.lineWidth * 2)
                 } else {
