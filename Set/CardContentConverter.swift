@@ -15,7 +15,6 @@ struct CardContentConverter {
             let shapesCount = card.content.count.get() + 1
             
             VStack {
-                
                 ForEach(0..<shapesCount, id: \.self) { _ in
                     switch card.content.texture.get() {
                     case 0: filledShape(of: card)
